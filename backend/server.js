@@ -11,24 +11,9 @@ const Review = require('./models/Review');
 const app = express();
 
 // Middleware
-const allowedOrigins = [
-  'http://localhost:5173',
-  'http://localhost:3000',
-  process.env.FRONTEND_URL,
-].filter(Boolean);
-
-app.use(cors({
-  origin: (origin, callback) => {
-    // allow requests with no origin (e.g. mobile apps, curl)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-}));
+app.use(cors());
 app.use(express.json());
+
 
 // Local Data Persistence Paths
 const DATA_DIR = path.join(__dirname, 'data');
