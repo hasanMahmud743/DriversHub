@@ -14,7 +14,7 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
-  process.env.FRONTEND_URL, // set this in Vercel env vars to your Netlify URL
+  process.env.FRONTEND_URL,
 ].filter(Boolean);
 
 app.use(cors({

@@ -46,7 +46,7 @@ const AdminDashboard = () => {
   const fetchOperators = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('http://localhost:5000/api/admin/operators');
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/operators`);
       setOperators(res.data);
       calculateStats(res.data);
     } catch (err) {
@@ -66,7 +66,7 @@ const AdminDashboard = () => {
 
   const handleAction = async (id, status) => {
     try {
-      await axios.patch(`http://localhost:5000/api/admin/operators/${id}`, { status });
+      await axios.patch(`${import.meta.env.VITE_API_URL}/api/admin/operators/${id}`, { status });
       fetchOperators();
     } catch (err) {
       console.error('Error updating status:', err);
@@ -76,7 +76,7 @@ const AdminDashboard = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this operator?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/admin/operators/${id}`);
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/admin/operators/${id}`);
         fetchOperators();
       } catch (err) {
         console.error('Error deleting operator:', err);

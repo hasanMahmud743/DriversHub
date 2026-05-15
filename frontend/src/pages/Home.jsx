@@ -20,7 +20,7 @@ const Home = () => {
   const [categoryCounts, setCategoryCounts] = useState({});
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/stats')
+    fetch(`${import.meta.env.VITE_API_URL}/api/stats`)
       .then(res => res.json())
       .then(data => setCategoryCounts(data.categoryCounts || {}))
       .catch(err => console.error('Error fetching stats:', err));

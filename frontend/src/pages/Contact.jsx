@@ -67,7 +67,7 @@ const Contact = () => {
   const fetchOperators = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`http://localhost:5000/api/operators/${selectedCategory}`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/operators/${selectedCategory}`);
       setOperators(res.data);
     } catch (err) {
       console.error('Error fetching operators:', err);
@@ -79,7 +79,7 @@ const Contact = () => {
   const fetchReviews = async (operatorId) => {
     try {
       setFetchingReviews(true);
-      const res = await axios.get(`http://localhost:5000/api/reviews/${operatorId}`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/reviews/${operatorId}`);
       setReviews(res.data);
     } catch (err) {
       console.error('Error fetching reviews:', err);
@@ -132,7 +132,7 @@ const Contact = () => {
         ...formData,
         addedBy: currentUser.uid
       };
-      await axios.post('http://localhost:5000/api/operators', payload);
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/operators`, payload);
       setSuccess('Operator added successfully! It will be visible after admin approval.');
       setTimeout(() => {
         setIsModalOpen(false);
@@ -160,7 +160,7 @@ const Contact = () => {
         rating: reviewForm.rating,
         comment: reviewForm.comment
       };
-      await axios.post('http://localhost:5000/api/reviews', payload);
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/reviews`, payload);
       setReviewForm({ rating: 5, comment: '' });
       fetchReviews(selectedOperator._id);
     } catch (err) {
