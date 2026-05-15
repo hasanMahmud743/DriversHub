@@ -6,7 +6,8 @@ import {
   createUserWithEmailAndPassword, 
   signOut,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithRedirect,
+  getRedirectResult
 } from 'firebase/auth';
 
 const AuthContext = createContext();
@@ -35,10 +36,15 @@ export function AuthProvider({ children }) {
 
   function googleSignIn() {
     const provider = new GoogleAuthProvider();
-    return signInWithPopup(auth, provider);
+    return signInWithRedirect(auth, provider);
   }
 
   useEffect(() => {
+    // Handle redirect result when user returns after Google login
+    getRedirectResult(auth).catch((err) => {
+      console.error('Redirect sign-in error:', err);
+    });
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
       setLoading(false);
