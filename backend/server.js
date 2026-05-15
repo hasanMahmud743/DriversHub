@@ -48,6 +48,11 @@ mongoose.connect(process.env.MONGO_URI, {
     isConnected = false;
   });
 
+// Health Check
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', message: '🚀 Drivers Hub API is running!' });
+});
+
 // Routes
 
 // PUBLIC: GET /api/operators/:category - Fetch ONLY approved drivers
