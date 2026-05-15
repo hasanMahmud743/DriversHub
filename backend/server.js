@@ -35,10 +35,14 @@ const DATA_DIR = path.join(__dirname, 'data');
 const OPERATORS_FILE = path.join(DATA_DIR, 'operators.json');
 const REVIEWS_FILE = path.join(DATA_DIR, 'reviews.json');
 
-// Ensure data directory exists
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
-if (!fs.existsSync(OPERATORS_FILE)) fs.writeFileSync(OPERATORS_FILE, JSON.stringify([]));
-if (!fs.existsSync(REVIEWS_FILE)) fs.writeFileSync(REVIEWS_FILE, JSON.stringify([]));
+// Ensure data directory exists (skipped on Vercel — read-only filesystem)
+try {
+  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
+  if (!fs.existsSync(OPERATORS_FILE)) fs.writeFileSync(OPERATORS_FILE, JSON.stringify([]));
+  if (!fs.existsSync(REVIEWS_FILE)) fs.writeFileSync(REVIEWS_FILE, JSON.stringify([]));
+} catch (e) {
+  // Serverless environment — local file storage not available
+}
 
 // Helper to handle local data
 const getLocalData = (file) => JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -268,7 +272,13 @@ app.get('/api/stats', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Export for Vercel serverless
+module.exports = app;
+
+// Listen only when running locally (not in a serverless environment)
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
